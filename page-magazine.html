@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPEN SOURCE QUARTERLY — The Agent Issue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4f0e8;
+    --ink: #141414;
+    --red: #d43b2a;
+    --grey: #8a857c;
+    --line: #141414;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.55;
+  }
+  .serif { font-family: 'Playfair Display', serif; }
+
+  /* 顶部刊头 */
+  .masthead {
+    border-bottom: 3px double var(--line);
+    padding: 20px 5vw 14px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  }
+  .masthead b { font-size: 13px; }
+
+  /* 报头 */
+  .hero { padding: 9vw 5vw 6vw; border-bottom: 1px solid var(--line); }
+  .kicker {
+    color: var(--red); font-weight: 800; letter-spacing: .3em;
+    text-transform: uppercase; font-size: 12px; margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(52px, 11vw, 130px);
+    line-height: .95;
+    letter-spacing: -.02em;
+  }
+  h1 em { font-style: italic; color: var(--red); }
+  .deck {
+    margin-top: 26px; max-width: 560px;
+    font-size: 15px; color: #3a3a3a;
+  }
+  .byline { margin-top: 20px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--grey); }
+
+  /* 目录条 */
+  .toc {
+    display: flex; flex-wrap: wrap; gap: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .toc button {
+    flex: 1 1 auto;
+    background: none; border: none; cursor: pointer;
+    padding: 14px 10px;
+    font: 600 11px/1 'Inter', sans-serif; letter-spacing: .15em; text-transform: uppercase;
+    border-right: 1px solid var(--line);
+    color: var(--grey);
+    transition: all .2s;
+  }
+  .toc button:last-child { border-right: none; }
+  .toc button:hover { background: var(--ink); color: var(--paper); }
+  .toc button.on { background: var(--red); color: #fff; }
+
+  /* 杂志网格：不对称 */
+  main { padding: 0 5vw 8vw; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0;
+  }
+  .story {
+    padding: 40px 34px 44px;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    position: relative;
+  }
+  .story .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 66px; font-weight: 400; font-style: italic;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--ink);
+    line-height: 1; margin-bottom: 14px;
+  }
+  .story h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700; font-size: 30px; line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .story .meta {
+    font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--grey); margin-bottom: 18px;
+  }
+  .story .meta b { color: var(--red); }
+  .story p.lede { font-size: 14px; color: #333; margin-bottom: 20px; max-width: 46ch; }
+  .story a {
+    display: inline-block; color: var(--ink);
+    font-size: 11px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase;
+    text-decoration: none; border-bottom: 2px solid var(--red); padding-bottom: 3px;
+  }
+  .story a:hover { color: var(--red); }
+  .story .pull {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 19px; color: var(--red); margin-top: 18px; line-height: 1.4;
+  }
+
+  /* 不对称跨度：模拟杂志排版 */
+  .s1 { grid-column: span 7; border-right: 1px solid var(--line); }
+  .s2 { grid-column: span 5; }
+  .s3 { grid-column: span 4; }
+  .s4 { grid-column: span 4; }
+  .s5 { grid-column: span 4; }
+  .s6 { grid-column: span 8; }
+  .s7 { grid-column: span 4; }
+  .s8 { grid-column: span 5; }
+  .s9 { grid-column: span 7; }
+  .story.big h2 { font-size: 44px; }
+  .story.big p.lede { font-size: 17px; }
+  .s2 { background: var(--ink); color: var(--paper); }
+  .s2 .num { -webkit-text-stroke: 1px var(--paper); }
+  .s2 .meta { color: #9a958c; }
+  .s2 p.lede { color: #c9c4bb; }
+  .s2 a { color: var(--paper); }
+  .s2 a:hover { color: var(--red); }
+
+  /* 页脚刊底 */
+  .colophon {
+    border-top: 3px double var(--line);
+    margin-top: 0; padding: 26px 5vw;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--grey);
+  }
+
+  .hidden { display: none !important; }
+  #nohit { padding: 60px 5vw; font-family: 'Playfair Display', serif; font-style: italic; font-size: 24px; color: var(--grey); }
+
+  @media (max-width: 760px) {
+    .story, .s1,.s2,.s3,.s4,.s5,.s6,.s7,.s8,.s9 { grid-column: span 12; border-right: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="masthead">
+    <span>Vol. 04 — No. 02</span>
+    <b>Open Source Quarterly</b>
+    <span>Est. 2026 · Free forever</span>
+  </div>
+
+  <header class="hero">
+    <p class="kicker">The Agent Issue · Special Report</p>
+    <h1>The Machines<br>Are <em>Star-gazing.</em></h1>
+    <p class="deck">
+      Eight open source projects consumed the GitHub trending charts this week — agents that write, speak, reverse and remember. We read every README so you don't have to. A field guide, printed on the web.
+    </p>
+    <p class="byline">Reported by the newsroom · Sources: github.com/trending</p>
+  </header>
+
+  <nav class="toc" id="toc">
+    <button class="on" data-cat="all">All Stories</button>
+    <button data-cat="agent">Agents</button>
+    <button data-cat="re">Reverse Eng.</button>
+    <button data-cat="voice">Voice</button>
+    <button data-cat="science">Science</button>
+  </nav>
+
+  <main>
+    <div class="grid" id="grid">
+
+      <article class="story s1 big" data-cat="agent">
+        <div class="num">01</div>
+        <h2>superpowers: The 300,000-Star Methodology</h2>
+        <p class="meta">Shell · <b>★ 300.2k</b> · +582/day · Filed under Agents</p>
+        <p class="lede">
+          A skills framework and software development methodology that quietly became the largest project on the board. Its premise: an agent without a playbook is just an expensive autocomplete.
+        </p>
+        <span class="pull">"An agent without a playbook is just an expensive autocomplete."</span>
+        <br><br><a href="https://github.com/obra/superpowers" target="_blank" rel="noopener">Read the repository →</a>
+      </article>
+
+      <article class="story s2" data-cat="agent">
+        <div class="num">02</div>
+        <h2 style="color:#fff">caveman: Talk Dumb, Spend Less</h2>
+        <p class="meta">Go · <b style="color:var(--red)">★ 112.8k</b> · −65% tokens</p>
+        <p class="lede">
+          The most parodied, most effective hack of the season. A proxy + skill that makes coding agents speak in monosyllables — and cuts token bills by 65%.
+        </p>
+        <a href="https://github.com/JuliusBrussee/caveman" target="_blank" rel="noopener">Read →</a>
+      </article>
+
+      <article class="story s3" data-cat="re">
+        <div class="num">03</div>
+        <h2>rea</h2>
+        <p class="meta">TypeScript · <b>★ 277.9k</b> · +32.3k/day</p>
+        <p class="lede">
+          Reverse engineer anything with agents, from app behavior down to native binaries. Today's runaway #1.
+        </p>
+        <a href="https://github.com/morluto/rea" target="_blank" rel="noopener">Read →</a>
+      </article>
+
+      <article class="story s4" data-cat="re">
+        <div class="num">04</div>
+        <h2>ghidra</h2>
+        <p class="meta">Java · NSA · <b>★ 89.1k</b></p>
+        <p class="lede">
+          The three-letter agency's gift to the world is surging again. The decompiler that defined a discipline.
+        </p>
+        <a href="https://github.com/NationalSecurityAgency/ghidra" target="_blank" rel="noopener">Read →</a>
+      </article>
+
+      <article class="story s5" data-cat="voice">
+        <div class="num">05</div>
+        <h2>VoiceStudio</h2>
+        <p class="meta">Python · <b>★ 69.7k</b> · +3.0k/day</p>
+        <p class="lede">
+          A fully-local ElevenLabs alternative: cloning, dubbing, transcription across 646 languages. Your voice never leaves the machine.
+        </p>
+        <a href="https://github.com/debpalash/VoiceStudio" target="_blank" rel="noopener">Read →</a>
+      </article>
+
+      <article class="story s6" data-cat="science">
+        <div class="num">06</div>
+        <h2>scientific-agent-skills: The Peer-Reviewed Agent</h2>
+        <p class="meta">Python · <b>★ 50.8k</b> · +1.1k/day · 177 validated skills</p>
+        <p class="lede">
+          One hundred seventy-seven skills, one hundred scientific databases, one ambition: turn any agent into an AI scientist. Biology, chemistry, medicine — with compatibility for Cursor, Claude Code and the open skills standard. The claim of 250,000 scientists onboard is bold; the star velocity suggests they aren't wrong.
+        </p>
+        <span class="pull">"From hypothesis to paper, without leaving the terminal."</span>
+        <br><br><a href="https://github.com/K-Dense-AI/scientific-agent-skills" target="_blank" rel="noopener">Read the repository →</a>
+      </article>
+
+      <article class="story s7" data-cat="agent">
+        <div class="num">07</div>
+        <h2>context-mode</h2>
+        <p class="meta">TypeScript · <b>★ 29.9k</b> · +904/day</p>
+        <p class="lede">
+          Sandboxed tool output, 98% smaller. Session memory that persists. A tokenizer's best friend.
+        </p>
+        <a href="https://github.com/mksglu/context-mode" target="_blank" rel="noopener">Read →</a>
+      </article>
+
+      <article class="story s8" data-cat="agent">
+        <div class="num">08</div>
+        <h2>xerj: Grep Is Dead, Long Live the Index</h2>
+        <p class="meta">Rust · <b>★ 6.0k</b> · +715/day · 40× fewer tokens</p>
+        <p class="lede">
+          One command indexes code, docs, logs and PDFs for agent memory and RAG — Elasticsearch-compatible, token-lean, written in Rust.
+        </p>
+        <a href="https://github.com/xerj-org/xerj" target="_blank" rel="noopener">Read →</a>
+      </article>
+
+      <article class="story s9" data-cat="voice">
+        <div class="num">09</div>
+        <h2>Context Is All You Need — A Closing Note</h2>
+        <p class="meta">Editorial · Filed under Analysis</p>
+        <p class="lede">
+          Look at the board again. Token optimization, context plumbing, agent harnesses, memory stores — this week's trending list isn't about bigger models. It's about the unglamorous machinery that makes them affordable. The gold rush has moved to the pickaxe aisle.
+        </p>
+        <span class="pull">"The gold rush has moved to the pickaxe aisle."</span>
+      </article>
+
+    </div>
+    <div id="nohit" class="hidden">No stories filed under this section — yet.</div>
+  </main>
+
+  <div class="colophon">
+    <span>Open Source Quarterly — printed on the web</span>
+    <span>No cookies · No paywall · No regrets</span>
+  </div>
+
+<script>
+  const btns = document.querySelectorAll('#toc button');
+  const stories = document.querySelectorAll('.story');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    const cat = b.dataset.cat;
+    let n = 0;
+    stories.forEach(s => {
+      const show = cat === 'all' || s.dataset.cat === cat;
+      s.classList.toggle('hidden', !show);
+      if (show) n++;
+    });
+    document.getElementById('nohit').classList.toggle('hidden', n > 0);
+  }));
+</script>
+</body>
+</html>
